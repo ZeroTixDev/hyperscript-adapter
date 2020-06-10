@@ -1,0 +1,26 @@
+{
+  "name": "@implode-nz/html",
+  "version": "5.0.0",
+  "description": "A package for writing HTML in JavaScript easier.",
+  "main": "index.js",
+  "scripts": {
+    "build": "uglifyjs -c --source-map -o index.min.js -- index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iMplode-nZ/HTML.git"
+  },
+  "keywords": [
+    "HTML",
+    "DOM"
+  ],
+  "author": "iMplode-nZ",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/iMplode-nZ/HTML/issues"
+  },
+  "homepage": "https://github.com/iMplode-nZ/HTML#readme",
+  "devDependencies": {
+    "uglify-js": "github:mishoo/UglifyJS2#harmony"
+  }
+}
