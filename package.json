@@ -1,10 +1,10 @@
 {
   "name": "@implode-nz/html",
-  "version": "5.2.0",
+  "version": "6.0.0",
   "description": "A package for writing HTML in JavaScript easier.",
   "main": "index.js",
   "scripts": {
-    "build": "uglifyjs -c -m --source-map -o index.min.js -- index.js"
+    "build": "uglifyjs -c -m --source-map url=index.min.js.map -o index.min.js -- index.js"
   },
   "repository": {
     "type": "git",
