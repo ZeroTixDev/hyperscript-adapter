@@ -154,7 +154,11 @@
         if (Object.prototype.toString.apply(args[0]) === '[object Object]')
             settingsList = args.shift();
         else settingsList = {};
-        const functionResult = interior => {
+        const functionResult = (...elements) => {
+            let interior = elements;
+            if (elements.length === 1 && Array.isArray(elements[0])) {
+                interior = elements[0];
+            }
             const element = document.createElement(tag);
             if (id != null) {
                 element.id = id;
