@@ -1,15 +1,15 @@
 <!-- markdownlint-disable no-inline-html no-bare-urls line-length no-trailing-punctuation -->
 
-# HTML
+# Hyperscript-Adapter
 
-This library is a utility for writing HTML easier. It supports independent usage as well as as an extension to React / Hyperscript (anything which exports a `h` or a `createElement` function).
+This library is a utility for writing HTML in JavaScript in a short syntax. It supports web frameworks that define a `h` or a `createElement` function, such as React.
 
 ## Install
 
 Simpily run:
 
 ```bash
-npm install --save @implode-nz/html
+npm install --save hyperscript-adapter
 ```
 
 ## Loading
@@ -19,13 +19,13 @@ Once this library is installed, load the file using a script or requirejs.
 Script loading:
 
 ```html
-<script src="path/to/HTML/index.min.js"></script>
+<script src="path/to/hyperscript-adapter/index.min.js"></script>
 ```
 
 Requirejs loading:
 
 ```js
-requirejs(['path/to/HTML/index.min.js'], HTML => {
+requirejs(['path/to/hyperscript-adapter/index.min.js'], HTML => {
     /* Do stuff with HTML */
 });
 ```
@@ -33,7 +33,7 @@ requirejs(['path/to/HTML/index.min.js'], HTML => {
 If requirejs is loaded before the HTML script, then HTML is exported:
 
 ```js
-requirejs(['HTML'], HTML => {
+requirejs(['hyperscript-adapter'], HTML => {
     /* Do stuff with HTML */
 });
 ```
@@ -62,6 +62,8 @@ requirejs(['HTML'], HTML => {
 ```
 
 ## Usage
+
+It is highly suggested to alias HTML to a shorter variable such as `h`. This is not provided by default as in browsers it may override the normal hyperscript that would be passed into settings.
 
 ```js
 // Creates a div.
