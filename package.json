@@ -1,6 +1,6 @@
 {
   "name": "@implode-nz/html",
-  "version": "6.0.0",
+  "version": "7.0.0",
   "description": "A package for writing HTML in JavaScript easier.",
   "main": "index.js",
   "scripts": {
