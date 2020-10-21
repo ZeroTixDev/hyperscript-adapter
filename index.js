@@ -21,39 +21,23 @@
         // Browser globals
         root.HTML = f();
     }
-})(typeof self !== 'undefined' ? self : this, function factory(_settings = {}) {
-    function withDefaults(obj, def) {
-        return new Proxy(obj, {
-            get(_, prop) {
-                const val = obj[prop];
-                const defval = def[prop];
-                if (val === undefined) {
-                    return defval;
-                } else if (typeof val === 'object') {
-                    return withDefaults(val, defval);
-                } else {
-                    return val;
-                }
-            },
-        });
-    }
-
-    const s = withDefaults(_settings, {
+})(typeof self !== 'undefined' ? self : this, function factory(
+    s = {
         hyphenate: {
             // Which properties to convert from camelCase to kebab-case.
             style: true, // Includes 'custom-vars-only' to only escape __fooBar as --foo-bar.
-            classes: true,
-            tag: true, // Due to web components, document.createElement requires the hyphen.
-            id: true,
+            classes: true, // Hyphenate classes. See hyphenate ids below.
+            tag: true, // Hyphenate tags. In most cases this should be true for compatibility with web components.
+            id: true, // Hyphenate ids: HTML._$fooBar() would be equal to HTML["_$foo-bar"]()
             data: true, // Hyphenate dataFoo to data-foo.
-            custom: () => {}, // First argument is the input, second is the toKebabCase function.
+            custom: () => {}, // First argument is the input, second is the toKebabCase function. This allows for custom middleware that gets executed before the call to h.
         },
-        textConvert: (x) => document.createTextNode(`${x}`), // The function that is called when an element is a test. Can be false to use the identity function (x => x).
-        combineId: false, // Whether to combine the id with the tag (tag#foo)
-        combineClasses: false,
-        fixArrays: true,
-        bundleIntoArray: false,
+        textConvert: (x) => document.createTextNode(`${x}`), // The function that is called when an element is text.
+        combineId: false, // Whether to call h with the id being combined (tag#foo)
+        combineClasses: false, // Whether to call h with the classes being combined (tag.foo.bar)
+        fixArrays: true, // Whether to flatten the second argument: HTML._({}, [elem, otherelem]) would be equivalent as HTML._({}, elem, otherelem)
         h: (tag, attrs, ...elements) => {
+            // This is the function called at the end.
             const element = document.createElement(tag);
             for (const [k, v] of Object.entries(attrs)) {
                 if (k === 'style') {
@@ -72,7 +56,43 @@
             elements.forEach((a) => element.appendChild(a)); // This property is adjusted.
             return element;
         },
-    });
+        resolvers: {
+            // Functions that resolve names such as the tag name.
+            // The second argument is the toKebabCase function, and the third is the entire settings passed in.
+            tagResolver: (tag, toKebabCase, opt) =>
+                opt.hyphenate.tag ? toKebabCase(tag) : tag,
+            idResolver: (id, toKebabCase, opt) =>
+                opt.hyphenate.id ? toKebabCase(id) : id,
+            classResolver: (cl, toKebabCase, opt) =>
+                opt.hyphenate.classes ? toKebabCase(cl) : cl,
+        },
+    }
+) {
+    function withDefaults(obj, def) {
+        return new Proxy(obj, {
+            get(_, prop) {
+                const val = obj[prop];
+                const defval = def[prop];
+                if (val === undefined) {
+                    return defval;
+                } else if (typeof val === 'object') {
+                    return withDefaults(val, defval);
+                } else {
+                    return val;
+                }
+            },
+        });
+    }
+
+    function resolve(resolver, x) {
+        if (typeof resolver === 'function') {
+            return resolver(x, toKebabCase, s);
+        } else {
+            const at = resolver[x];
+            if (at === undefined) throw new Error(`Cannot resolve value ${x}`);
+            return at;
+        }
+    }
 
     function toKebabCase(x) {
         return x
@@ -158,9 +178,9 @@
             }
         });
         return [
-            tag === '_' ? 'div' : s.hyphenate.tag ? toKebabCase(tag) : tag,
-            s.hyphenate.classes ? classes.map(toKebabCase) : classes,
-            s.hyphenate.id ? toKebabCase(id) : id,
+            tag === '_' ? 'div' : resolve(s.resolvers.tagResolver, tag),
+            classes.map((a) => resolve(s.resolvers.classResolver, a)),
+            resolve(s.resolvers.idResolver, id),
         ];
     }
 
@@ -180,7 +200,7 @@
             return createTag(tag);
         },
         apply(_, __, args) {
-            return factory(...args);
+            return factory(withDefaults(args[0], s));
         },
     });
 });

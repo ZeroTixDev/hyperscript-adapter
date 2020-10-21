@@ -152,3 +152,32 @@ deepEq(
     },
     calledCustom[0]
 );
+let resolved;
+const FH4 = HTML({
+    h: fakeH,
+    fixArrays: false,
+    bundleIntoArray: true,
+    resolvers: {
+        tagResolver(...args) {
+            resolved = args;
+            return 'tag';
+        },
+        idResolver: {
+            bar: 'baz',
+        },
+    },
+});
+deepEq(
+    [
+        'tag',
+        {
+            id: 'baz',
+            className: 'baz-qux',
+        },
+        [],
+    ],
+    FH4.foo$bar.bazQux()
+);
+deepEq('foo', resolved[0]);
+if (typeof resolved[1] !== 'function') throw new Error('Invalid toKebabCase');
+if (resolved[2].bundleIntoArray !== true) throw new Error('Invalid settings');

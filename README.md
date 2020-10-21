@@ -57,7 +57,36 @@ requirejs(['hyperscript-adapter'], HTML => {
     combineId: false, // Whether to call h with the id being combined (tag#foo)
     combineClasses: false, // Whether to call h with the classes being combined (tag.foo.bar)
     fixArrays: true, // Whether to flatten the second argument: HTML._({}, [elem, otherelem]) would be equivalent as HTML._({}, elem, otherelem)
-    h: (tag, attrs, ...elements) => { ... } // This is the function called at the end.
+    h: (tag, attrs, ...elements) => {
+        // This is the function called at the end.
+        const element = document.createElement(tag);
+        for (const [k, v] of Object.entries(attrs)) {
+            if (k === 'style') {
+                const style = element.style;
+                if (typeof v === 'string') {
+                    style.cssText = v;
+                } else {
+                    for (const [sk, sv] of Object.entries(v)) {
+                        style.setProperty(sk, `${sv}`);
+                    }
+                }
+            } else if (k.startsWith('data-')) {
+                element.setAttribute(k, `${v}`);
+            } else element[k] = v;
+        }
+        elements.forEach((a) => element.appendChild(a)); // This property is adjusted.
+        return element;
+    },
+    resolvers: {
+        // Functions that resolve names such as the tag name.
+        // The second argument is the toKebabCase function, and the third is the entire settings passed in.
+        tagResolver: (tag, toKebabCase, opt) =>
+            opt.hyphenate.tag ? toKebabCase(tag) : tag,
+        idResolver: (id, toKebabCase, opt) =>
+            opt.hyphenate.id ? toKebabCase(id) : id,
+        classResolver: (cl, toKebabCase, opt) =>
+            opt.hyphenate.classes ? toKebabCase(cl) : cl,
+    },
 }
 ```
 

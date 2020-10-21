@@ -1,6 +1,6 @@
 {
   "name": "hyperscript-adapter",
-  "version": "7.0.0",
+  "version": "7.1.0",
   "description": "A package that provides unified functionality between different frameworks and terser syntax.",
   "main": "index.js",
   "scripts": {
@@ -8,18 +8,19 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/iMplode-nZ/HTML.git"
+    "url": "git+https://github.com/iMplode-nZ/hyperscript-adapter.git"
   },
   "keywords": [
     "HTML",
-    "DOM"
+    "DOM",
+    "hyperscript"
   ],
   "author": "iMplode-nZ",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/iMplode-nZ/HTML/issues"
+    "url": "https://github.com/iMplode-nZ/hyperscript-adapter/issues"
   },
-  "homepage": "https://github.com/iMplode-nZ/HTML#readme",
+  "homepage": "https://github.com/iMplode-nZ/hyperscript-adapter#readme",
   "devDependencies": {
     "uglify-js": "github:mishoo/UglifyJS2#harmony"
   }
