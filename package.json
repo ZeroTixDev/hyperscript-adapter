@@ -5,7 +5,7 @@
   "main": "index.js",
   "browser": true,
   "scripts": {
-    "build": "uglifyjs -c -m --source-map url=index.min.js.map -o index.min.js -- index.js"
+    "build": "terser -c -m --source-map url=index.min.js.map -o index.min.js -- index.js"
   },
   "repository": {
     "type": "git",
@@ -23,6 +23,6 @@
   },
   "homepage": "https://github.com/iMplode-nZ/hyperscript-adapter#readme",
   "devDependencies": {
-    "uglify-js": "github:mishoo/UglifyJS2#harmony"
+    "terser": "^5.3.8"
   }
 }
