@@ -3,6 +3,7 @@
   "version": "7.1.0",
   "description": "A package that provides unified functionality between different frameworks and terser syntax.",
   "main": "index.js",
+  "browser": true,
   "scripts": {
     "build": "uglifyjs -c -m --source-map url=index.min.js.map -o index.min.js -- index.js"
   },
