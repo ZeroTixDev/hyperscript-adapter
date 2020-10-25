@@ -110,13 +110,13 @@
         }
         let combined = tag;
         if (id !== '') {
-            if (s.combineId) {
+            if (s.combineId && typeof combined === 'string') {
                 combined += `#${id}`;
             } else {
                 attrs.id = id;
             }
         }
-        if (s.combineClasses) {
+        if (s.combineClasses && typeof combined === 'string') {
             combined += classes.map((x) => `.${x}`).join('');
         } else if (classes.length !== 0) {
             attrs.className = classes.join(' ');
