@@ -90,6 +90,7 @@ const FH1 = HTML({
     h: fakeH,
     fixArrays: false,
 });
+deepEq(['div', { className: 'foo' }], FH1._[''].foo());
 deepEq(['div', {}], FH1._());
 deepEq(['div', {}, ['div', {}]], FH1._(FH1._()));
 // Combine ids and classes

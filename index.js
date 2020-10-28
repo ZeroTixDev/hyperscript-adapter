@@ -158,7 +158,7 @@
     }
 
     function parseString(str) {
-        const regex = /(^\w+)|(\.)(\w+)|(\$)(\w+)/gy;
+        const regex = /(^\w+)|[\.|\$]*(\.)(\w+)|[\.|\$]*(\$)(\w*)/gy;
         let tag = 'div';
         const classes = [];
         let id = '';
